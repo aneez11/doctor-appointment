@@ -20,15 +20,25 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('patients',function (){
-    return view('patients.index');
-})->name('patients');
-Route::get('users',function (){
-    return view('users.index');
-})->name('users');
-Route::get('doctors',function (){
-    return view('doctors.index');
-})->name('doctors');
-Route::get('appointments',function (){
-    return view('appointments.index');
-})->name('appointments');
+Route::resource('users',\App\Http\Controllers\UserController::class);
+Route::resource('patients',\App\Http\Controllers\PatientController::class);
+Route::resource('doctors',\App\Http\Controllers\DoctorController::class);
+Route::resource('appointments',\App\Http\Controllers\AppointmentController::class);
+Route::get('home',function (){
+    return view('home');
+})->name('dashboard');
+
+Route::get('logout',[\App\Http\Controllers\UserController::class,'logout'])->name('logout');
+
+//Route::get('patients',function (){
+//    return view('patients.index');
+//})->name('patients');
+//Route::get('users',function (){
+//    return view('users.index');
+//})->name('users');
+//Route::get('doctors',function (){
+//    return view('doctors.index');
+//})->name('doctors');
+//Route::get('appointments',function (){
+//    return view('appointments.index');
+//})->name('appointments');

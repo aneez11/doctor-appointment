@@ -5,10 +5,29 @@ body{
     flex-direction: column;
     min-height: 100vh;
 }
+.color-custom{
+    color: #05D8A5;
+}
 .btn-custom{
     background-color: #05D8A5;
     color: white;
     font-weight: 600;
+}
+.btn-outline-custom{
+    border: 1px solid #05D8A5;
+    /*background-color: #05D8A5;*/
+    color: #05D8A5;
+    font-weight: 600;
+}
+.btn-outline-custom:hover{
+    background-color: #05D8A5;
+    color: white;
+}
+.bg-custom{
+    background-color: #05D8A5;
+}
+.active{
+    font-weight: 500;
 }
 .my-nav{
     position: sticky;

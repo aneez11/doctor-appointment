@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -53,6 +55,10 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'dob' => ['required'],
+            'gender' => ['required'],
+            'type' => 'required|in:patient,doctor',
+
         ]);
     }
 
@@ -64,10 +70,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $user = User::create([
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        $newData = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'dob' => $data['dob'],
+            'gender' => $data['gender'],
+            'user_id' => $user->id
+        ];
+        if ($data['type'] == 'doctor'){
+            Doctor::create($newData);
+        }
+        elseif ($data['type'] == 'patient'){
+            Patient::create($newData);
+        }
+        $user->assignRole($data['type']);
+        return $user;
     }
 }
