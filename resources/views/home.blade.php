@@ -17,7 +17,7 @@
             <div class="col-md-3">
                 <div class="card text-white bg-danger border-0 mb-3">
                     <div class="card-header">
-                        <h5>Total Users</h5>
+                        <h5>Total Admins</h5>
                     </div>
                     <div class="card-body d-flex justify-content-end">
                         <h1 class="font-weight-bolder">50</h1>

@@ -19,11 +19,11 @@
                         <a class="nav-link" href="#footer">Contact Us</a>
                     </li>
                     <li class="nav-item me-3">
-                        <a class="btn btn-custom" href="{{ route('login') }}" tabindex="-1" aria-disabled="true">Login</a>
+                        <a class="btn btn-custom" href="{{ route('login') }}" tabindex="-1" aria-disabled="true">Book an Appointment !</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="btn btn-outline-custom" href="{{ route('register') }}" tabindex="-1" aria-disabled="true">Register</a>
-                    </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="btn btn-outline-custom" href="{{ route('register') }}" tabindex="-1" aria-disabled="true">Register</a>--}}
+{{--                    </li>--}}
                 </ul>
             </div>
         </div>
@@ -31,31 +31,7 @@
     <style>
 
     </style>
-    {{--    <header class="py-1" style="background: white">--}}
-    {{--        <div class="container">--}}
-    {{--            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">--}}
-    {{--                <a href="{{ url('/') }}" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-decoration-none">--}}
-    {{--                    <img src="{{ asset('images/med-logo-01.svg') }}" class="bi me-2" width="40" alt="">--}}
-    {{--                    <h5>Doctor's Appointment System</h5>--}}
-    {{--                </a>--}}
-    {{--                <ul>--}}
-    {{--                    <li>--}}
-    {{--                        <a href="#">Home</a>--}}
-    {{--                    </li>--}}
-    {{--                    <li>--}}
-    {{--                        <a href="#">About Us</a>--}}
-    {{--                    </li>--}}
-    {{--                    <li>--}}
-    {{--                        <a href="#">Contact Us</a>--}}
-    {{--                    </li>--}}
-    {{--                    <li>--}}
-    {{--                        <a href="#">Login</a>--}}
-    {{--                    </li>--}}
-    {{--                </ul>--}}
 
-    {{--            </div>--}}
-    {{--        </div>--}}
-    {{--    </header>--}}
 
 
 </div>

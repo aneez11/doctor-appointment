@@ -20,9 +20,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('users',\App\Http\Controllers\UserController::class);
+Route::resource('admins',\App\Http\Controllers\AdminController::class);
 Route::resource('patients',\App\Http\Controllers\PatientController::class);
 Route::resource('doctors',\App\Http\Controllers\DoctorController::class);
+Route::post('doctor/{id}/createSchedule',[\App\Http\Controllers\DoctorController::class,'addSchedule'])->name('doctors.addSchedule');
+Route::post('doctor/{id}/editSchedule',[\App\Http\Controllers\DoctorController::class,'editSchedule'])->name('doctors.editSchedule');
 Route::resource('appointments',\App\Http\Controllers\AppointmentController::class);
 Route::get('home',function (){
     return view('home');

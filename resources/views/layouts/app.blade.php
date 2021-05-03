@@ -7,6 +7,7 @@
     <title>Doctors' Appointment System</title>
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
@@ -14,7 +15,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     {{--    <link rel="stylesheet" href="css/styles.css?v=1.0">--}}
-
+@yield('styles')
 </head>
 @if(Auth::user())
 
@@ -35,14 +36,29 @@
     </div>
 </footer>
 {{--<script src="js/scripts.js"></script>--}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/git/ui/jquery-ui-git.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
 <script>
+
+    function readURL(input){
+        let id = $(input).attr('target');
+        console.log(id);
+        if (input.files && input.files[0]){
+            let reader = new FileReader();
+            reader.onload = function (e){
+                $('#'+id).attr('src',e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     $(document).ready(function () {
         $('#table_id').DataTable();
     });
 </script>
+@yield('scripts')
 </body>
 </html>
