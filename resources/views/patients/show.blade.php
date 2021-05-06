@@ -46,13 +46,22 @@
                 <hr>
             </div>
             <div class="col-12 mt-3 mb-5">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="d-flex justify-content-between mb-3">
                     <h3>Patient Reports</h3>
                     <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addReportModal">Add New report</button>
                 </div>
                 <div class="row">
                     @foreach($reports as $report)
-                        <div class="col-md-2">
+                        <div class="col-md-2 mb-3">
                             <div class="card">
                                 <div class="card-body">
                                     <button data-bs-toggle="modal" data-bs-target="#addReportModal"
@@ -62,7 +71,7 @@
                                             data-bs-name="{{$report->name}}"
                                             class="hover btn btn-danger btn-sm">Edit
                                     </button>
-                                    <img src="{{ $report->image }}" width="100%" alt="">
+                                    <img class="report-image" src="{{ $report->image }}" width="100%" alt="">
                                     <div class="mt-3">
                                         <p><b>{{ $report->name }}</b></p>
                                     </div>
@@ -82,9 +91,10 @@
                     <h5 class="modal-title" id="addReportModalLabel">Add New Report</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="{{ route('patient.report.create',$patient->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                 <div class="modal-body">
-                    <form>
-                        @csrf
+
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -104,22 +114,30 @@
                             <div class="col-md-8">
                                 <div class="mb-3">
                                     <label for="name" class="col-form-label">Name:</label>
-                                    <input type="text" class="form-control" id="name" name="name">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name">
+                                    @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="col-form-label">Description:</label>
-                                    <textarea class="form-control" id="description" name="description"></textarea>
+                                    <textarea class="form-control @error('description') is-invalid @enderror" rows="5" id="description" name="description"></textarea>
+                                    @error('description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
-
-
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -147,8 +165,9 @@
             // Update the modal's content.
             addReportModal.querySelector('.modal-title')
 
-            var modalTitle = addReportModal.querySelector('.modal-title')
-            var modalBodyInput = addReportModal.querySelector('.modal-body input')
+            addReportModal.querySelector('#name').value = name
+            addReportModal.querySelector('#description').value = description
+            addReportModal.querySelector('#photo_preview').src = image
 
             // modalTitle.textContent = 'New message to ' + recipient
             // modalBodyInput.value = recipient
@@ -163,6 +182,11 @@
             right: 10px;
             font-size: 12px;
             z-index: 99;
+        }
+        .report-image{
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
         }
     </style>
 @endsection

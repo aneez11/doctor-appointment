@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
@@ -33,9 +35,26 @@ class ReportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Patient $patient, Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'photo' => 'required'
+        ]);
+//        dd($request);
+        $data = [
+            'name' => $request->name,
+            'patient_id' => $patient->id,
+            'description' => $request->description
+        ];
+        $report = Report::create($data);
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('local')->putFileAs('public/patients/reports', $image, $imageName);
+            $report->update(['image' => asset('storage/patients/reports/' . $imageName)]);
+        }
     }
 
     /**
