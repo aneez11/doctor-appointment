@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PatientController extends Controller
 {
@@ -25,7 +29,7 @@ class PatientController extends Controller
      */
     public function create()
     {
-        //
+        return view('patients.create');
     }
 
     /**
@@ -36,7 +40,39 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'dob' => ['required'],
+            'gender' => ['required'],
+            'phone' => 'required',
+            'address' => 'required',
+            'photo' => 'required',
+            'marital_status' => 'required',
+        ]);
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'dob' => $request->dob,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'marital_status' => $request->marital_status,
+    ];
+        $user = User::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
+        $user->assignRole('patient');
+        $patient = Patient::create($data);
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('local')->putFileAs('public/patients', $image, $imageName);
+            $patient->update(['photo' => asset('storage/patients/' . $imageName)]);
+        }
+        return redirect()->route('patients.index')->with('success','Patient Added Successfully');
     }
 
     /**
@@ -47,7 +83,8 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        //
+        $reports = Report::where('patient_id',$patient->id)->get();
+        return view('patients.show',compact('patient','reports'));
     }
 
     /**
@@ -58,7 +95,7 @@ class PatientController extends Controller
      */
     public function edit(Patient $patient)
     {
-        //
+        return view('patients.edit',compact('patient'));
     }
 
     /**
@@ -70,7 +107,38 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $patient)
     {
-        //
+//        dd($request);
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('doctors')->ignore($patient->id)],
+            'dob' => ['required'],
+            'gender' => ['required'],
+            'phone' => 'required',
+            'address' => 'required',
+            'photo' => 'required',
+            'marital_status' => 'required',
+        ]);
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'dob' => $request->dob,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'marital_status' => $request->marital_status,
+        ];
+//        $user = User::create([
+//            'email' => $request->email,
+//            'password' => bcrypt($request->password)
+//        ]);
+        $patient->update($data);
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('local')->putFileAs('public/patients', $image, $imageName);
+            $patient->update(['photo' => asset('storage/patients/' . $imageName)]);
+        }
+        return redirect()->route('patients.show',$patient->id)->with('success','Patient Updated Successfully');
     }
 
     /**
@@ -81,6 +149,8 @@ class PatientController extends Controller
      */
     public function destroy(Patient $patient)
     {
-        //
+        $patient->user()->delete();
+        $patient->delete();
+        return redirect()->route('patients.index')->with('success','Patient Deleted Successfully');
     }
 }

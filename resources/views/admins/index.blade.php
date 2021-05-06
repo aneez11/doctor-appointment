@@ -2,7 +2,7 @@
 @section('content')
     <div class="container my-5">
         <div class="d-flex justify-content-between align-content-center mb-4">
-            <h4>All Admins</h4>
+            <h4>All Patients</h4>
             <a href="{{ route('admins.create') }}" type="button" style="height: 32px" class="btn btn-sm btn-custom">Add New Admin</a>
         </div>
         @if (session('success'))
@@ -65,21 +65,7 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
 
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <img src="..." class="rounded me-2" alt="...">
-                <strong class="me-auto">Bootstrap</strong>
-                <small>11 mins ago</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                Hello, world! This is a toast message.
-            </div>
-        </div>
-    </div>
 @endsection
 @section('scripts')
     <script>

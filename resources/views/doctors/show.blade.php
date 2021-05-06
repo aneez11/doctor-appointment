@@ -100,7 +100,6 @@
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="" class="btn btn-info bn-sm">Details</a>
                             <button data-bs-toggle="modal" data-bs-target="#addSchedule"
                                     data-bs-id="{{ $schedule->id }}"
                                     data-bs-date="{{ $schedule->date }}"
@@ -111,7 +110,6 @@
                                     class="btn btn-warning bn-sm">Edit
                             </button>
                             <button data-bs-toggle="modal" data-bs-target="#deleteDoctor" class="btn btn-danger bn-sm"
-
                             >Delete
                             </button>
                         </div>

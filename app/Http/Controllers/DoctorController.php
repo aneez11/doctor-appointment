@@ -158,7 +158,9 @@ class DoctorController extends Controller
      */
     public function destroy(Doctor $doctor)
     {
-        //
+        $doctor->user()->delete();
+        $doctor->delete();
+        return redirect()->route('doctors.index')->with('success','Doctor Deleted Successfully');
     }
 
     /**
@@ -199,7 +201,6 @@ class DoctorController extends Controller
         ]);;
         $day = Carbon::createFromFormat('Y-m-d', $request->date)->format('l');
         $data = [
-            'doctor_id' => $id,
             'date' => $request->date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
