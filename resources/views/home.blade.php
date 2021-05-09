@@ -4,13 +4,13 @@
         <div class="row">
             <div class="com-12">
                 @role('patient')
-                <h3>Hello, Patient {{ Auth::user()->patient->name }}</h3>
+                <h3>Hello, Patient {{ Auth::user()->email }}</h3>
                 @endrole
                 @role('doctor')
-                <h3>Hello, Doctor {{ Auth::user()->doctor->name }}</h3>
+                <h3>Hello, Doctor {{ Auth::user()->email }}</h3>
                 @endrole
                 @role('admin')
-                <h3>Hello, Admin {{ Auth::user()->admin->name }}</h3>
+                <h3>Hello, Admin {{ Auth::user()->email }}</h3>
                 @endrole
             </div>
             @role('admin')

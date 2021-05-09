@@ -32,9 +32,9 @@ class PatientSeeder extends Seeder
         $admin = Patient::create($data);
         $admin->update(['user_id' => $user->id]);
         $faker = Faker::create();
-        for ($i=0;$i<10;$i++){
+        for ($i = 0; $i < 10; $i++) {
             $data = [
-                'photo' => $faker->imageUrl(250,250),
+                'photo' => $faker->imageUrl(250, 250),
                 'name' => $faker->name,
                 'email' => $faker->email,
                 'phone' => $faker->phoneNumber,

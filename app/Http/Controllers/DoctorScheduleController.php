@@ -7,11 +7,17 @@ use Illuminate\Http\Request;
 
 class DoctorScheduleController extends Controller
 {
+    public function doctorSchedule($id)
+    {
+        $schedules = DoctorSchedule::where('doctor_id', $id)->get();
+        return response()->json($schedules);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         //

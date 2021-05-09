@@ -23,11 +23,11 @@
             </thead>
             <tbody>
             @foreach($patients as $patient)
-                <tr>
-                    <td><img src="{{ $patient->photo }}" height="50px" alt="{{ $patient->name }}"></td>
+                <tr class="{{ $patient->user->status == true ? null : 'inactive' }}">
+                    <td width="60px" class="text-center"><img src="{{ $patient->photo }}" width="50px" alt="{{ $patient->name }}"></td>
                     <td width="20%"><b>{{ $patient->name }}</b></td>
                     <td>{{ $patient->email }}</td>
-                    <td>{{ $patient->phone }}</td>
+                    <td>{{ $patient->user->status }}</td>
                     <td>{{ $patient->address }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

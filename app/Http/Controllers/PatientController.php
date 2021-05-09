@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Report;
 use App\Models\User;
@@ -19,7 +21,7 @@ class PatientController extends Controller
     public function index()
     {
         $patients = Patient::all();
-        return view('patients.index',compact('patients'));
+        return view('patients.index', compact('patients'));
     }
 
     /**
@@ -59,7 +61,7 @@ class PatientController extends Controller
             'gender' => $request->gender,
             'address' => $request->address,
             'marital_status' => $request->marital_status,
-    ];
+        ];
         $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password)
@@ -72,7 +74,7 @@ class PatientController extends Controller
             Storage::disk('local')->putFileAs('public/patients', $image, $imageName);
             $patient->update(['photo' => asset('storage/patients/' . $imageName)]);
         }
-        return redirect()->route('patients.index')->with('success','Patient Added Successfully');
+        return redirect()->route('patients.index')->with('success', 'Patient Added Successfully');
     }
 
     /**
@@ -83,8 +85,10 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        $reports = Report::where('patient_id',$patient->id)->get();
-        return view('patients.show',compact('patient','reports'));
+        $appointments = Appointment::where('patient_id', $patient->id)->get();
+        $reports = Report::where('patient_id', $patient->id)->get();
+        $doctors = Doctor::all();
+        return view('patients.show', compact('patient', 'reports', 'appointments', 'doctors'));
     }
 
     /**
@@ -95,7 +99,7 @@ class PatientController extends Controller
      */
     public function edit(Patient $patient)
     {
-        return view('patients.edit',compact('patient'));
+        return view('patients.edit', compact('patient'));
     }
 
     /**
@@ -107,7 +111,7 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $patient)
     {
-//        dd($request);
+        //        dd($request);
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('doctors')->ignore($patient->id)],
@@ -127,10 +131,10 @@ class PatientController extends Controller
             'address' => $request->address,
             'marital_status' => $request->marital_status,
         ];
-//        $user = User::create([
-//            'email' => $request->email,
-//            'password' => bcrypt($request->password)
-//        ]);
+        //        $user = User::create([
+        //            'email' => $request->email,
+        //            'password' => bcrypt($request->password)
+        //        ]);
         $patient->update($data);
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
@@ -138,7 +142,7 @@ class PatientController extends Controller
             Storage::disk('local')->putFileAs('public/patients', $image, $imageName);
             $patient->update(['photo' => asset('storage/patients/' . $imageName)]);
         }
-        return redirect()->route('patients.show',$patient->id)->with('success','Patient Updated Successfully');
+        return redirect()->route('patients.show', $patient->id)->with('success', 'Patient Updated Successfully');
     }
 
     /**
@@ -151,6 +155,14 @@ class PatientController extends Controller
     {
         $patient->user()->delete();
         $patient->delete();
-        return redirect()->route('patients.index')->with('success','Patient Deleted Successfully');
+        return redirect()->route('patients.index')->with('success', 'Patient Deleted Successfully');
+    }
+    public function changeStatus(Patient $patient)
+    {
+        // dd($patient);
+        $status = $patient->user->status;
+        $newStatus = !$status;
+        $patient->user()->update(['status' => $newStatus]);
+        return back()->with('success', 'Patient Status Changed');
     }
 }

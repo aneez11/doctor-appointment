@@ -50,6 +50,11 @@
                     </tbody>
                 </table>
                 <a href="{{ route('doctors.edit',$doctor->id) }}" class="btn btn-custom">Edit</a>
+                @if ($doctor->user->status == true )
+                <button data-bs-toggle="modal" data-bs-target="#changeStatus" class="btn btn-danger">Disable</button>
+                @else
+                <button data-bs-toggle="modal" data-bs-target="#changeStatus" class="btn btn-success">Enable</button>
+            @endif
 
             </div>
         </div>
@@ -186,6 +191,27 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="Submit" class="btn btn-primary">Submit</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="changeStatus" tabindex="-1" data-bs-backdrop="static" aria-labelledby="changeStatus" data-bs-keyboard="false"  aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addReportModalLabel">Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="updateForm" action="{{ route('doctor.changeStatus',$doctor->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                <div class="modal-body text-center">
+
+                        <h5>Do you want to {{ $doctor->user->status == true ? 'disable' : 'enable' }} the Doctor?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                </div>
                 </form>
             </div>
         </div>

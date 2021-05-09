@@ -211,4 +211,11 @@ class DoctorController extends Controller
         $schedule->update($data);
         return back()->with('success', 'Doctor Schedule Updated Successfully');
     }
+    public function changeStatus(Doctor $doctor){
+        // dd($patient);
+        $status = $doctor->user->status;
+        $newStatus = !$status;
+        $doctor->user()->update(['status'=> $newStatus]);
+        return back()->with('success','Doctor Status Changed');
+    }
 }

@@ -29,8 +29,8 @@ class DoctorSeeder extends Seeder
             'password' => bcrypt('password')
         ]);
         $user->assignRole('doctor');
-        $admin = Doctor::create($data);
-        $admin->update(['user_id' => $user->id]);
+        $doctor = Doctor::create($data);
+        $doctor->update(['user_id' => $user->id]);
         $faker = Faker::create();
         for ($i = 0; $i < 10; $i++) {
             $data = [
@@ -43,7 +43,7 @@ class DoctorSeeder extends Seeder
                 'address' => $faker->address,
                 'qualification' => $faker->text(50),
                 'specialist' => $faker->text(50),
-                'fees' => $faker->numberBetween(50,100)
+                'fees' => $faker->numberBetween(50, 100)
             ];
             $user = User::create([
                 'email' => $data['email'],
@@ -53,7 +53,5 @@ class DoctorSeeder extends Seeder
             $doctor = Doctor::create($data);
             $doctor->update(['user_id' => $user->id]);
         }
-
     }
-
 }

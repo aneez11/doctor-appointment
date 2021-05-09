@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -15,8 +16,13 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::all();
-        return view('appointments.index',compact('appointments'));
+        $user = Auth::user();
+        if ($user->hasRole('admin')) {
+            $appointments = Appointment::all();
+        } elseif ($user->hasRole('doctor')) {
+            $appointments = Appointment::where('doctor_id', $user->doctor->id)->get();
+        }
+        return view('appointments.index', compact('appointments'));
     }
 
     /**
@@ -37,7 +43,26 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'patient_id' => 'required',
+            'doctor_id' => 'required',
+            'doctor_schedule_id' => 'required',
+            'time' => 'required',
+            'description' => 'required'
+        ]);
+        $appointmentNumber = sprintf("%03u-%s-%s", $request->doctor_id, $request->date, $request->time);
+        // dd($appointmentNumber);
+        $data = [
+            'doctor_id' => $request->doctor_id,
+            'patient_id' => $request->patient_id,
+            'doctor_schedule_id' => $request->doctor_schedule_id,
+            'appointment_number' => $appointmentNumber,
+            'reason' => $request->description,
+            'time' => $request->time,
+        ];
+        Appointment::create($data);
+        return back()->with('success', 'Appointment Created Successfully');
+        // dd($request);
     }
 
     /**
@@ -48,7 +73,8 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        //
+        // dd($appointment);
+        return view('appointments.show', compact('appointment'));
     }
 
     /**

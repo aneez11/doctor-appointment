@@ -23,7 +23,7 @@
             </thead>
             <tbody>
             @foreach($doctors as $doctor)
-                <tr>
+                <tr class="{{ $doctor->user->status == true ? null : 'inactive' }}">
                     <td><img src="{{ $doctor->photo }}" height="50px" alt="{{ $doctor->name }}"></td>
                     <td width="20%"><b>{{ $doctor->name }}</b></td>
                     <td>{{ $doctor->email }}</td>

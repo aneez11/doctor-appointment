@@ -55,6 +55,7 @@ class ReportController extends Controller
             Storage::disk('local')->putFileAs('public/patients/reports', $image, $imageName);
             $report->update(['image' => asset('storage/patients/reports/' . $imageName)]);
         }
+        return back()->with('success','Report Added Successfully');
     }
 
     /**
@@ -88,7 +89,23 @@ class ReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+//        dd($request);
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description
+        ];
+        $report->update($data);
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('local')->putFileAs('public/patients/reports', $image, $imageName);
+            $report->update(['image' => asset('storage/patients/reports/' . $imageName)]);
+        }
+        return back()->with('success','Report Updated Successfully');
     }
 
     /**

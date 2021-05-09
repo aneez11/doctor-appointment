@@ -41,6 +41,9 @@ body{
 .nav-2{
     box-shadow: 0 2px 2px 0 #00000024;
 }
+.inactive{
+    background-color: rgba(248, 53, 53, 0.349) !important;
+}
 header{
     background-color: #05D8A5;
 }
