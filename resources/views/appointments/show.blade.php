@@ -46,38 +46,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-12">
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-            <div class="d-flex justify-content-between mb-3">
-                <h3>Patient Reports</h3>
-                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addReportModal">Add New
-                    report</button>
-            </div>
-            <div class="row">
-                @foreach($appointment->patient->reports as $report)
-                <div class="col-md-2 mb-3">
-                    <div class="card">
-                        <div class="card-body">
 
-                            <img class="report-image" src="{{ $report->image }}" width="100%" alt="">
-                            <div class="mt-3">
-                                <p><b>{{ $report->name }}</b></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-
-            </div>
-        </div>
     </div>
 </div>
 <div class="modal fade" id="addReportModal" tabindex="-1" data-bs-backdrop="static"
