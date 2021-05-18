@@ -1,4 +1,5 @@
-$("#date").change(function () {
+$("#date,#date2").change(function () {
+    console.log("sfsdf");
     let startTime = $("option:selected", this).attr("start-time");
     let endTime = $("option:selected", this).attr("end-time");
     let maxPatients = $("option:selected", this).attr("max");
@@ -18,14 +19,10 @@ $("#date").change(function () {
 function timeSlot(time) {
     return (
         `<div class="form-check">
-                                <input class="form-check-input" value="` +
+           <input class="form-check-input" value="` +
         time +
-        `" type="radio" name="time">
-                                <label class="form-check-label">
-                                    ` +
+        `" type="radio" name="time"><label class="form-check-label"> ` +
         time +
-        `
-                                </label>
-                            </div>`
+        ` </label></div>`
     );
 }

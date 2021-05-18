@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             DoctorScheduleSeeder::class,
             ReportSeeder::class,
             AppointmentSeeder::class,
+            CheckupSeeder::class,
         ]);
     }
 }

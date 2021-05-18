@@ -17,11 +17,12 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
-            $table->foreignId('doctor_schedule_id');
+            $table->foreignId('doctor_schedule_id')->nullable();
             $table->string('appointment_number');
             $table->longText('reason');
             $table->string('time');
             $table->boolean('status')->default(false);
+            $table->foreignId('referred_from')->nullable();
             $table->timestamps();
         });
     }

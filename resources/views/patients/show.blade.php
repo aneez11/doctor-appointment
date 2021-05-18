@@ -68,7 +68,8 @@
             @endif
             <div class="d-flex justify-content-between mb-3">
                 <h3>Patient Reports</h3>
-                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addReportModal">Add New
+                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addReportModal"
+                    data-bs-type="create">Add New
                     report</button>
             </div>
             <div class="row">
@@ -79,7 +80,7 @@
                             <button data-bs-toggle="modal" data-bs-target="#addReportModal"
                                 data-bs-image="{{$report->image}}" data-bs-id="{{$report->id}}"
                                 data-bs-description="{{$report->description}}" data-bs-name="{{$report->name}}"
-                                class="hover btn btn-danger btn-sm">Edit
+                                data-bs-type="edit" class="hover btn btn-danger btn-sm">Edit
                             </button>
                             <img class="report-image" src="{{ $report->image }}" width="100%" alt="">
                             <div class="mt-3">
@@ -332,7 +333,9 @@
             var image = button.getAttribute('data-bs-image')
             var name = button.getAttribute('data-bs-name')
             var description = button.getAttribute('data-bs-description')
-            addReportModal.querySelector('.modal-title')
+
+            if(type == 'edit'){
+              addReportModal.querySelector('.modal-title')
 
             addReportModal.querySelector('#name').value = name
             addReportModal.querySelector('#description').value = description
@@ -340,7 +343,14 @@
             let editUrl = '{{ route('patient.report.update',":id") }}'
             editUrl = editUrl.replace(':id', id);
             $('#updateForm').attr('action', editUrl);
-
+            }
+            else{
+                addReportModal.querySelector('#name').value = ''
+            addReportModal.querySelector('#description').value = ''
+            addReportModal.querySelector('#photo_preview').src = ''
+                let createUrl = '{{ route('patient.report.create',$patient->id) }}'
+            $('#updateForm').attr('action', createUrl);
+            }
         });
 
   //doctor appointment

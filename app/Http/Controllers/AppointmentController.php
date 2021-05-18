@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Doctor;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -17,12 +19,16 @@ class AppointmentController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $doctors = Doctor::all();
+        $patients = Patient::all();
         if ($user->hasRole('admin')) {
             $appointments = Appointment::all();
         } elseif ($user->hasRole('doctor')) {
             $appointments = Appointment::where('doctor_id', $user->doctor->id)->get();
+        } elseif ($user->hasRole('patient')) {
+            $appointments = Appointment::where('patient_id', $user->patient->id)->get();
         }
-        return view('appointments.index', compact('appointments'));
+        return view('appointments.index', compact('appointments', 'doctors', 'patients'));
     }
 
     /**
@@ -74,7 +80,8 @@ class AppointmentController extends Controller
     public function show(Appointment $appointment)
     {
         // dd($appointment);
-        return view('appointments.show', compact('appointment'));
+        $doctors = Doctor::all();
+        return view('appointments.show', compact('appointment', 'doctors'));
     }
 
     /**
@@ -97,7 +104,25 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, Appointment $appointment)
     {
-        //
+        // dd($request);
+        $request->validate([
+            'patient_id' => 'required',
+            'doctor_id' => 'required',
+            'doctor_schedule_id' => 'required',
+            'time' => 'required',
+            'description' => 'required'
+        ]);
+        $appointmentNumber = sprintf("%03u-%s-%s", $request->doctor_id, $request->date, $request->time);
+        $data = [
+            'doctor_id' => $request->doctor_id,
+            'patient_id' => $request->patient_id,
+            'doctor_schedule_id' => $request->doctor_schedule_id,
+            'appointment_number' => $appointmentNumber,
+            'reason' => $request->description,
+            'time' => $request->time,
+        ];
+        $appointment->update($data);
+        return back()->with('success', 'Appointment Updated Successfully');
     }
 
     /**
@@ -109,5 +134,11 @@ class AppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         //
+    }
+    public function complete(Appointment $appointments)
+    {
+        // dd($appointments);
+        $appointments->update(['status' => 1]);
+        return back()->with('success', 'Appointment Completed Successfully');
     }
 }

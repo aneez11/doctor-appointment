@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\CheckupController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,7 +35,11 @@ Route::resource('doctors', \App\Http\Controllers\DoctorController::class);
 Route::post('doctor/{doctor}/changeStatus', [\App\Http\Controllers\DoctorController::class, 'changeStatus'])->name('doctor.changeStatus');
 Route::post('doctor/{id}/createSchedule', [\App\Http\Controllers\DoctorController::class, 'addSchedule'])->name('doctors.addSchedule');
 Route::post('doctor/{id}/editSchedule', [\App\Http\Controllers\DoctorController::class, 'editSchedule'])->name('doctors.editSchedule');
+//appointments
 Route::resource('appointments', \App\Http\Controllers\AppointmentController::class);
+Route::put('appointments/{appointments}/complete', [\App\Http\Controllers\AppointmentController::class, 'complete'])->name('appointments.complete');
+
+Route::resource('checkups', CheckupController::class);
 Route::get('home', function () {
     return view('home');
 })->name('dashboard');
@@ -44,7 +49,7 @@ Route::get('logout', [\App\Http\Controllers\UserController::class, 'logout'])->n
 Route::get('profile', function () {
     $user = Auth::user();
     if ($user->hasRole('patient')) {
-        return view('patient.profile.profile', compact('user'));
+        return view('patients.profile.profile', compact('user'));
     } elseif ($user->hasRole('admin')) {
         return view('admins.profile.profile', compact('user'));
     } elseif ($user->hasRole('doctor')) {
