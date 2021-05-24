@@ -27,4 +27,12 @@ class Appointment extends Model
     {
         return $this->hasMany(Checkup::class);
     }
+    public function referredTo()
+    {
+        return $this->belongsTo(Appointment::class, 'referred_to');
+    }
+    public function referredFrom()
+    {
+        return $this->belongsTo(Appointment::class, 'referred_from');
+    }
 }

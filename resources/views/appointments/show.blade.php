@@ -50,12 +50,21 @@
                 </tbody>
             </table>
             @if ($appointment->status == 0)
+            @if (isset($appointment->referred_from))
+            <button class="btn btn-danger text-white" disabled>
+                Referred from {{ $appointment->referredFrom->doctor->name }}</button>
+            @endif
             <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#appointmentModal">Refer to another
                 doctor</button>
             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#markCompleted">Mark as
                 Completed</button>
             @else
             <button class="btn btn-success" disabled>Completed</button>
+            @if (isset($appointment->referred_to))
+            <button class="btn btn-danger text-white" disabled>
+                Referred to {{ $appointment->referredTo->doctor->name }}</button>
+            @endif
+
             @endif
 
         </div>
@@ -120,6 +129,26 @@
             </tr>
         </thead>
         <tbody>
+            @if (isset($appointment->referred_from))
+            @foreach ($appointment->referredFrom->checkups as $checkup)
+            <tr>
+                <td>{{ $checkup->date }}</td>
+                <td>{!! substr_replace($checkup->checkup_info,"...",100) !!}</td>
+                <td>{!! substr_replace($checkup->prescriptions,"...",100) !!}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#checkupDetails"
+                            data-bs-date="{{ $checkup->date }}" data-bs-info="{{ $checkup->checkup_info }}"
+                            data-bs-prescriptions="{{ $checkup->prescriptions }}">View</button>
+                        @role('doctor')
+                        <button class="btn btn-warning" disabled>From referral</button>
+                        @endrole
+
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+            @endif
             @foreach ($appointment->checkups as $checkup)
             <tr>
                 <td>{{ $checkup->date }}</td>
@@ -303,14 +332,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="appointmentModalLabel">Add New Appointment</h5>
+                <h5 class="modal-title" id="appointmentModalLabel">Refer to another doctor</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="forEdit" action="" method="POST">
+            <form id="forEdit" action="{{ route('appointments.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     {{-- <input type="hidden" name="patient_id" value="{{ $patient->id }}"> --}}
                     <input type="hidden" name="date" value="" id="hiddenDate">
+                    <input type="hidden" name="referral" value="{{ $appointment->id}}">
                     <input type="hidden" name="patient_id" value="{{ $appointment->patient->id }}" />
                     <div class="row">
                         <div class="col-12">

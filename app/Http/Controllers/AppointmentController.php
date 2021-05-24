@@ -49,6 +49,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
             'patient_id' => 'required',
             'doctor_id' => 'required',
@@ -66,7 +67,13 @@ class AppointmentController extends Controller
             'reason' => $request->description,
             'time' => $request->time,
         ];
-        Appointment::create($data);
+        // dd($data);
+        $newApp = Appointment::create($data);
+        if (isset($request->referral)) {
+            $newApp->update(['referred_from' => $request->referral]);
+            Appointment::findOrFail($request->referral)->update(['status' => 1, 'referred_to' => $newApp->id]);
+            return back()->with('success', 'Referred to another doctor successfully');
+        }
         return back()->with('success', 'Appointment Created Successfully');
         // dd($request);
     }

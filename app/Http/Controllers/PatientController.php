@@ -165,4 +165,9 @@ class PatientController extends Controller
         $patient->user()->update(['status' => $newStatus]);
         return back()->with('success', 'Patient Status Changed');
     }
+    public function doctors()
+    {
+        $doctors = Doctor::all();
+        return view('patients.doctors.index', compact('doctors'));
+    }
 }

@@ -23,6 +23,7 @@ class CreateAppointmentsTable extends Migration
             $table->string('time');
             $table->boolean('status')->default(false);
             $table->foreignId('referred_from')->nullable();
+            $table->foreignId('referred_to')->nullable();
             $table->timestamps();
         });
     }

@@ -7,10 +7,9 @@
                     <img src="{{ asset('images/med-logo-white-01.svg') }}" class="bi me-2" width="40" alt="">
                     <h5>Doctor's Appointment System</h5>
                 </a>
-
                 <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                     <li>
-                        <a href="{{ route('dashboard') }}" class="nav-link text-secondary">
+                        <a href="{{ route('dashboard') }}" class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" width="24"
                                 height="24" fill="currentColor" viewBox="0 0 16 16">
                                 <path
@@ -19,6 +18,16 @@
                                     d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z" />
                             </svg>
                             Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('patients.doctors') }}" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M15 2.013L9 2.013 9 9 2 9 2 15 9 15 9 21.987 15 21.987 15 15 22 15 22 9 15 9z">
+                                </path>
+                            </svg>
+                            Doctors
                         </a>
                     </li>
                     @role('admin')

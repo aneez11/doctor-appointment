@@ -19,7 +19,9 @@
                 @role('admin|patient')
                 <th>Doctor</th>
                 @endrole
+                @role('admin|doctor')
                 <th>Patient</th>
+                @endrole
                 <th>Status</th>
                 <th>ACTION</th>
             </tr>
@@ -33,7 +35,9 @@
                 @role('admin|patient')
                 <td>{{ $appointment->doctor->name }}</td>
                 @endrole
+                @role('admin|doctor')
                 <td>{{ $appointment->patient->name }}</td>
+                @endrole
                 <td class="text-center">
                     @if ($appointment->status == 1)
                     <span class="badge bg-info">Completed</span>
@@ -78,7 +82,7 @@
                     {{-- <input type="hidden" name="patient_id" value="{{ $patient->id }}"> --}}
                     <input type="hidden" name="date" value="" id="hiddenDate">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12" @role('patient') style="display:none" @endrole>
                             <div class="mb-3">
                                 <label for="patient_id" class="col-form-label">Select Patient:</label>
                                 <select class="form-select" name="patient_id" id="patient_id">

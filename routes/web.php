@@ -30,6 +30,7 @@ Route::post('patient/{patient}/changeStatus', [\App\Http\Controllers\PatientCont
 //reports
 Route::post('patient/{patient}/report/create', [\App\Http\Controllers\ReportController::class, 'store'])->name('patient.report.create');
 Route::post('patient/report/{report}/update', [\App\Http\Controllers\ReportController::class, 'update'])->name('patient.report.update');
+Route::get('patient/doctors', [PatientController::class, 'doctors'])->name('patients.doctors');
 //doctors
 Route::resource('doctors', \App\Http\Controllers\DoctorController::class);
 Route::post('doctor/{doctor}/changeStatus', [\App\Http\Controllers\DoctorController::class, 'changeStatus'])->name('doctor.changeStatus');

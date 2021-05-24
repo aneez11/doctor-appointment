@@ -1,5 +1,4 @@
 $("#date,#date2").change(function () {
-    console.log("sfsdf");
     let startTime = $("option:selected", this).attr("start-time");
     let endTime = $("option:selected", this).attr("end-time");
     let maxPatients = $("option:selected", this).attr("max");
