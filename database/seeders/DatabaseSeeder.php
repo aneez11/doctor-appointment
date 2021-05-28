@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Doctor;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ReportSeeder::class,
             AppointmentSeeder::class,
             CheckupSeeder::class,
+            DoctorLeaveSeeder::class,
         ]);
     }
 }

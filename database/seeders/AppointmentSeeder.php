@@ -34,7 +34,7 @@ class AppointmentSeeder extends Seeder
                             'appointment_number' => $appointmentNumber,
                             'reason' => $faker->realText(200),
                             'time' => $faker->time('H:i'),
-                            'status' => $faker->boolean(50)
+                            'status' => $faker->randomElement([0])
                         ];
                         Appointment::create($data);
                     }

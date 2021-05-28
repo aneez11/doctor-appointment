@@ -34,7 +34,7 @@
             <form id="forEdit" action="{{ route('appointments.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <input type="hidden" name="patient_id" value="{{ Auth::user()->id }}">
+                    <input type="hidden" name="patient_id" value="{{ Auth::user()->patient->id }}">
                     <input type="hidden" name="doctor_id" id="docid">
                     <input type="hidden" name="date" value="" id="hiddenDate">
                     <div class="row">

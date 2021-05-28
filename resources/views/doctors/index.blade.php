@@ -30,8 +30,8 @@
                     <div class="btn-group btn-group-sm">
                         <a href="{{ route('doctors.show',$doctor->id) }}" class="btn btn-info bn-sm">Details</a>
                         <a href="{{ route('doctors.edit',$doctor->id) }}" class="btn btn-warning bn-sm">Edit</a>
-                        <button data-bs-toggle="modal" data-bs-target="#deleteDoctor" class="btn btn-danger bn-sm"
-                            data-bs-id="{{ $doctor->id }}" data-bs-name="{{ $doctor->name }}">Delete</button>
+                        {{-- <button data-bs-toggle="modal" data-bs-target="#deleteDoctor" class="btn btn-danger bn-sm"
+                            data-bs-id="{{ $doctor->id }}" data-bs-name="{{ $doctor->name }}">Delete</button> --}}
                     </div>
                 </td>
             </tr>

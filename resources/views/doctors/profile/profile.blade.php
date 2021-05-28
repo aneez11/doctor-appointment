@@ -46,12 +46,26 @@
                         <td>Specialist:</td>
                         <th>{{ $user->doctor->specialist }}</th>
                     </tr>
+                    <tr>
+                        <td>Doctor Leave Dates: </td>
+                        <th>
+                            @if (!empty($leaves))
+                            @foreach ($leaves as $leave)
+                            <span class="badge bg-primary">{{ Carbon\Carbon::parse($leave)->format('d M Y') }}</span>
 
+                            @endforeach
+                            @else
+                            <span class="badge bg-info">No leave information.</span>
+                            @endif
+
+                        </th>
+                    </tr>
                 </tbody>
             </table>
-            <a href="{{ route('doctors.edit',$user->doctor->id) }}" class="btn btn-custom">Edit</a>
             @if ($user->doctor->user->status == true )
+            <a href="{{ route('doctors.edit',$user->doctor->id) }}" class="btn btn-custom">Edit</a>
             <button data-bs-toggle="modal" data-bs-target="#changeStatus" class="btn btn-danger">Disable</button>
+            <button data-bs-toggle="modal" data-bs-target="#addLeave" class="btn btn-info">Add Leave</button>
             @else
             <button data-bs-toggle="modal" data-bs-target="#changeStatus" class="btn btn-success">Enable</button>
             @endif
@@ -207,10 +221,50 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="addLeave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title">Add Doctor Leave Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('doctors.addLeave',$user->doctor->id) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="date" class="form-label">Select leave Date</label>
+                            <input type="text" class="date1 form-control @error('date') is-invalid @enderror"
+                                value="{{ old('date') }}" name="date">
+                            @error('date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="col-12 mt-3">
+                            <div class="alert alert-danger">Warning! After this action all the appointments on the
+                                selected date will be cancelled and the process is irreversible.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="Submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @section('scripts')
 <script>
     $('#date').datepicker({
+            minDate: 0,
+            dateFormat: 'yy-mm-dd',
+        });
+        $('.date1').datepicker({
             minDate: 0,
             dateFormat: 'yy-mm-dd',
         });

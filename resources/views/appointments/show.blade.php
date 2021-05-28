@@ -56,17 +56,27 @@
             @endif
             <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#appointmentModal">Refer to another
                 doctor</button>
+            @role('admin|doctor')
             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#markCompleted">Mark as
                 Completed</button>
-            @else
-            <button class="btn btn-success" disabled>Completed</button>
+            @endrole
+            @role('admin|patient')
+            @if ($appointment->status != 3)
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#cancelAppointment">Cancel
+                Appointment</button>
+            @endif
+            @endrole
+            @elseif ($appointment->status == 1)
+            <button disabled class="btn btn-success">Completed</button>
+            @elseif ($appointment->status == 2)
+            <button disabled class="btn btn-info">Referred</button>
+            @elseif ($appointment->status == 3)
+            <button disabled class="btn btn-secondary">Cancelled</button>
+            @endif
             @if (isset($appointment->referred_to))
             <button class="btn btn-danger text-white" disabled>
                 Referred to {{ $appointment->referredTo->doctor->name }}</button>
             @endif
-
-            @endif
-
         </div>
         <div class="col-12 mt-4">
             @if ($errors->any())
@@ -420,6 +430,28 @@
                 </div>
                 <div class="modal-body text-center">
                     <h4>Mark this Appointment as Completed?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-custom">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{{-- Completed --}}
+<div class="modal fade" id="cancelAppointment" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="addReportModalLabel" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{{ route('appointments.cancel',$appointment->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Cancel This Appointment?</h4>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-custom">Yes</button>

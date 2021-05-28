@@ -20,6 +20,7 @@
                             Dashboard
                         </a>
                     </li>
+                    @role('patient')
                     <li>
                         <a href="{{ route('patients.doctors') }}" class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -30,6 +31,7 @@
                             Doctors
                         </a>
                     </li>
+                    @endrole
                     @role('admin')
                     <li>
                         <a href="{{ route('admins.index') }}" class="nav-link text-white">

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
+    <table>
+        <tbody>
+            <tr data-id="4">
+                <td>
+                    <div contenteditable class="update" data-column="garbagechrg">1</div>
+                </td>
+                <td>
+                    <div contenteditable class="update" data-column="otherchrg1">111</div>
+                </td>
+                <td>
+                    <div contenteditable class="update" data-column="otherchrg2">111</div>
+                </td>
+               <td>
+                <button class="submit">submit</button>
+               </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="output" ></div>
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  crossorigin="anonymous"></script>
+
+    <script>
+        $('.submit').click(function(){
+            let dataRow = $(this).closest('tr');
+            let rowId = dataRow.attr('data-id');
+            console.log(rowId)
+           let inputs = dataRow.find('.update');
+           let data = new Object();
+            inputs.map(function(){
+                if(this.innerHTML > 0){
+
+                    data[this.dataset.column] = this.innerHTML;
+                }
+                else{
+                    this.innerHTML = 'Value must be greater than 0';
+                }
+            });
+            console.log(data)
+            if(inputs.length == Object.keys(data).length){
+                $('#output').html('Submit Form')
+            }
+            else{
+                $('#output').html('Oops some values are not greater than 0')
+
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -33,6 +33,11 @@
         {{ session('success') }}
     </div>
     @endif
+    @if (session('warning'))
+    <div class="alert alert-danger" role="alert">
+        {{ session('warning') }}
+    </div>
+    @endif
     @yield('content')
     <footer class="mt-auto  bg-light" id="footer">
         <div class="container">

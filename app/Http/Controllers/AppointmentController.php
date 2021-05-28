@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Notifications\AppointmentNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -69,11 +70,22 @@ class AppointmentController extends Controller
         ];
         // dd($data);
         $newApp = Appointment::create($data);
+        $notification = [
+            'message' => 'appointment Created Successfully',
+            'date' => $request->date,
+            'time' => $request->time,
+            'patient' => $newApp->patient->name,
+            'doctor' => $newApp->doctor->name,
+        ];
+
         if (isset($request->referral)) {
             $newApp->update(['referred_from' => $request->referral]);
-            Appointment::findOrFail($request->referral)->update(['status' => 1, 'referred_to' => $newApp->id]);
+            Appointment::findOrFail($request->referral)->update(['status' => 2, 'referred_to' => $newApp->id]);
+            $notification['message'] = 'Appointment Referred';
+            $newApp->patient->user->notify(new AppointmentNotification($notification));
             return back()->with('success', 'Referred to another doctor successfully');
         }
+        $newApp->patient->user->notify(new AppointmentNotification($notification));
         return back()->with('success', 'Appointment Created Successfully');
         // dd($request);
     }
@@ -127,8 +139,17 @@ class AppointmentController extends Controller
             'appointment_number' => $appointmentNumber,
             'reason' => $request->description,
             'time' => $request->time,
+            'status' => 0
         ];
         $appointment->update($data);
+        $notification = [
+            'message' => 'appointment Updated Successfully',
+            'date' => $appointment->schedule->date,
+            'time' => $appointment->time,
+            'patient' => $appointment->patient->name,
+            'doctor' => $appointment->doctor->name,
+        ];
+        $appointment->patient->user->notify(new AppointmentNotification($notification));
         return back()->with('success', 'Appointment Updated Successfully');
     }
 
@@ -138,9 +159,19 @@ class AppointmentController extends Controller
      * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Appointment $appointment)
+    public function cancel(Appointment $appointment)
     {
-        //
+        // dd($appointment);
+        $appointment->update(['status' => 3]);
+        $notification = [
+            'message' => 'appointment Cancelled Successfully',
+            'date' => $appointment->schedule->date,
+            'time' => $appointment->time,
+            'patient' => $appointment->patient->name,
+            'doctor' => $appointment->doctor->name,
+        ];
+        $appointment->patient->user->notify(new AppointmentNotification($notification));
+        return back()->with('success', 'Appointment Cancelled Successfully');
     }
     public function complete(Appointment $appointments)
     {

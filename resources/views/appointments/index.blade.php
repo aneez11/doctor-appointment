@@ -39,16 +39,21 @@
                 <td>{{ $appointment->patient->name }}</td>
                 @endrole
                 <td class="text-center">
-                    @if ($appointment->status == 1)
-                    <span class="badge bg-info">Completed</span>
-                    @else
+                    @if ($appointment->status == 0)
                     <span class="badge bg-danger">Not Completed</span>
+                    @elseif ($appointment->status == 1)
+                    <span class="badge bg-success">Completed</span>
+                    @elseif ($appointment->status == 2)
+                    <span class="badge bg-info">Referred</span>
+                    @elseif ($appointment->status == 3)
+                    <span class="badge bg-secondary">Cancelled</span>
                     @endif
                 </td>
                 <td width="100px">
                     <div class="btn-group btn-group-sm">
                         <a href="{{ route('appointments.show',$appointment->id) }}"
                             class="btn btn-info bn-sm">Details</a>
+                        @if ($appointment->status != 1)
                         <button data-bs-toggle="modal" data-bs-target="#appointmentModal"
                             data-bs-id="{{ $appointment->id }}" data-bs-pid="{{ $appointment->patient->id }}"
                             data-bs-pname="{{ $appointment->patient->name }}"
@@ -59,7 +64,7 @@
                             data-bs-date="{{ $appointment->schedule->date}}" data-bs-time="{{ $appointment->time}}"
                             class="btn btn-warning bn-sm">Edit
                         </button>
-
+                        @endif
                     </div>
                 </td>
             </tr>
