@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 Route::resource('admins', \App\Http\Controllers\AdminController::class)->middleware('auth', 'verified');
 //patient
 Route::resource('patients', \App\Http\Controllers\PatientController::class)->middleware('auth', 'verified');
@@ -43,9 +43,6 @@ Route::put('appointments/{appointments}/complete', [\App\Http\Controllers\Appoin
 Route::put('appointments/{appointment}/cancel', [\App\Http\Controllers\AppointmentController::class, 'cancel'])->middleware('auth', 'verified')->name('appointments.cancel');
 
 Route::resource('checkups', CheckupController::class)->middleware('auth', 'verified');
-Route::get('home', function () {
-    return view('home');
-})->middleware('auth', 'verified')->name('dashboard');
 
 Route::get('logout', [\App\Http\Controllers\UserController::class, 'logout'])->name('logout');
 

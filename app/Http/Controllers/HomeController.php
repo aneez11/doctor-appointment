@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 namespace App\Models;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -29,6 +30,10 @@ class HomeController extends Controller
         $doctors = Doctor::all();
         $appointment = Appointment::all();
         $patient = Patient::all();
-        return view('home', compact('admins', 'doctors', 'appointment', 'patient'));
+        if (Auth::user()->role('patient')){
+            $appointments = Appointment::where('patient_id',Auth::user()->patient->id)->get();
+            return view('dashboard');
+        }
+//        return view('home', compact('admins', 'doctors', 'appointment', 'patient'));
     }
 }

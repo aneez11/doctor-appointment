@@ -2,7 +2,6 @@
 @section('content')
 
     <div class="container mt-4">
-
         <div class="row">
             <div class="col-md-3">
                 <div class="card text-white bg-danger border-0 mb-3">

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use MacsiDigital\Zoom\Facades\Zoom;
 
 class AdminController extends Controller
 {
@@ -19,7 +20,20 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $admins = Admin::where('id','!=',Auth::user()->admin->id)->get();
+//        $user = [
+//            "first_name"=> "Harry",
+//            "last_name"=> "Ghim",
+//            "email"=> "fhjdhf@djhfjdf.ff",
+//            "password"=> "bdkfhds1e3r",
+//        ];
+//        $test = Zoom::user()->create([
+//            'first_name' => 'First Name',
+//            'last_name' => 'Last Name',
+//            'email' => 'test@test.com',
+//            'password' => 'password'
+//        ]);
+//        dd($test);
+        $admins = Admin::where('id', '!=', Auth::user()->admin->id)->get();
         return view('admins.index', compact('admins'));
     }
 
@@ -83,7 +97,7 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
-        return view('admins.show',compact('admin'));
+        return view('admins.show', compact('admin'));
     }
 
     /**
@@ -147,6 +161,6 @@ class AdminController extends Controller
     {
         $admin->user()->delete();
         $admin->delete();
-        return redirect()->route('admins.index')->with('success','Admin Deleted Successfully');
+        return redirect()->route('admins.index')->with('success', 'Admin Deleted Successfully');
     }
 }

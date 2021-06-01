@@ -71,7 +71,7 @@ class AppointmentController extends Controller
         // dd($data);
         $newApp = Appointment::create($data);
         $notification = [
-            'message' => 'appointment Created Successfully',
+            'message' => 'appointment Has Been Created',
             'date' => $request->date,
             'time' => $request->time,
             'patient' => $newApp->patient->name,
@@ -83,9 +83,11 @@ class AppointmentController extends Controller
             Appointment::findOrFail($request->referral)->update(['status' => 2, 'referred_to' => $newApp->id]);
             $notification['message'] = 'Appointment Referred';
             $newApp->patient->user->notify(new AppointmentNotification($notification));
+            $newApp->doctor->user->notify(new AppointmentNotification($notification));
             return back()->with('success', 'Referred to another doctor successfully');
         }
         $newApp->patient->user->notify(new AppointmentNotification($notification));
+        $newApp->doctor->user->notify(new AppointmentNotification($notification));
         return back()->with('success', 'Appointment Created Successfully');
         // dd($request);
     }
@@ -143,13 +145,14 @@ class AppointmentController extends Controller
         ];
         $appointment->update($data);
         $notification = [
-            'message' => 'appointment Updated Successfully',
+            'message' => 'Appointment Has Ben Updated',
             'date' => $appointment->schedule->date,
             'time' => $appointment->time,
             'patient' => $appointment->patient->name,
             'doctor' => $appointment->doctor->name,
         ];
         $appointment->patient->user->notify(new AppointmentNotification($notification));
+        $appointment->doctor->user->notify(new AppointmentNotification($notification));
         return back()->with('success', 'Appointment Updated Successfully');
     }
 
@@ -164,13 +167,14 @@ class AppointmentController extends Controller
         // dd($appointment);
         $appointment->update(['status' => 3]);
         $notification = [
-            'message' => 'appointment Cancelled Successfully',
+            'message' => 'appointment Has beeb Cancelled',
             'date' => $appointment->schedule->date,
             'time' => $appointment->time,
             'patient' => $appointment->patient->name,
             'doctor' => $appointment->doctor->name,
         ];
         $appointment->patient->user->notify(new AppointmentNotification($notification));
+        $appointment->doctor->user->notify(new AppointmentNotification($notification));
         return back()->with('success', 'Appointment Cancelled Successfully');
     }
     public function complete(Appointment $appointments)
