@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/home', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware('auth', 'verified')->name('dashboard');
 Route::resource('admins', \App\Http\Controllers\AdminController::class)->middleware('auth', 'verified');
 //patient
 Route::resource('patients', \App\Http\Controllers\PatientController::class)->middleware('auth', 'verified');
