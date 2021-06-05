@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('doctor/{id}/schedules', [DoctorScheduleController::class, 'doctorSchedule'])->name('api.doctor.schedule');
+Route::get('achedule/{date}/more', [DoctorScheduleController::class, 'more'])->name('api.doctor.schedule.more');
+Route::get('check/{date}',[\App\Http\Controllers\AppointmentController::class,'check']);

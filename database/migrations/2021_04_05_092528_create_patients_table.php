@@ -24,6 +24,7 @@ class CreatePatientsTable extends Migration
             $table->string('gender')->nullable();
             $table->string('address')->nullable();
             $table->string('marital_status')->nullable();
+            $table->boolean('isComplete')->default(false);
             $table->timestamps();
         });
     }

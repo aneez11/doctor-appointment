@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -114,12 +115,11 @@ class PatientController extends Controller
         //        dd($request);
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('doctors')->ignore($patient->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('patients')->ignore($patient->id)],
             'dob' => ['required'],
             'gender' => ['required'],
             'phone' => 'required',
             'address' => 'required',
-            'photo' => 'required',
             'marital_status' => 'required',
         ]);
         $data = [
@@ -130,12 +130,16 @@ class PatientController extends Controller
             'gender' => $request->gender,
             'address' => $request->address,
             'marital_status' => $request->marital_status,
+            'isComplete' => true
         ];
         //        $user = User::create([
         //            'email' => $request->email,
         //            'password' => bcrypt($request->password)
         //        ]);
         $patient->update($data);
+        $user =  User::findOrFail($patient->user_id);
+        $user->email = $request->email;
+        $user->save();
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -163,6 +167,10 @@ class PatientController extends Controller
         $status = $patient->user->status;
         $newStatus = !$status;
         $patient->user()->update(['status' => $newStatus]);
+        if (Auth::user()->hasRole('patient')){
+            Auth::logout();
+            return redirect('/login')->with('warning','Your Account has been disabled. Contact the System Administrator');
+        }
         return back()->with('success', 'Patient Status Changed');
     }
     public function doctors()

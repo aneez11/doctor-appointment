@@ -24,6 +24,9 @@ class CreateAppointmentsTable extends Migration
             $table->integer('status')->default(0);
             $table->foreignId('referred_from')->nullable();
             $table->foreignId('referred_to')->nullable();
+            $table->string('type');
+            $table->string('meeting_link')->nullable();
+            $table->boolean('isPaid')->default(false);
             $table->timestamps();
         });
     }

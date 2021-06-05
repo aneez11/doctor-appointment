@@ -8,10 +8,13 @@ use App\Models\DoctorLeave;
 use App\Models\DoctorSchedule;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Notifications\AppointmentNotification;
+use function PHPUnit\Framework\isEmpty;
 
 class DoctorController extends Controller
 {
@@ -152,9 +155,13 @@ class DoctorController extends Controller
             'address' => $request->address,
             'fees' => $request->fees,
             'qualification' => $request->qualification,
-            'specialist' => $request->specialist
+            'specialist' => $request->specialist,
+            'isComplete' => true
         ];
         $doctor->update($data);
+        $user =  User::findOrFail($doctor->user_id);
+        $user->email = $request->email;
+        $user->save();
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -185,6 +192,10 @@ class DoctorController extends Controller
      */
     public function addSchedule(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
+        $schedule = DoctorSchedule::where('date',$request->date)->get();
+        if($schedule->count() > 0){
+            return back()->with('warning','Schedule for the date has already been created. Try next Date');
+        }
         $request->validate([
             'date' => 'required',
             'start_time' => 'required',
@@ -231,10 +242,15 @@ class DoctorController extends Controller
         $status = $doctor->user->status;
         $newStatus = !$status;
         $doctor->user()->update(['status' => $newStatus]);
+        if (Auth::user()->hasRole('doctor')){
+            Auth::logout();
+            return redirect('/login')->with('warning','Your Account has been disabled. Contact the System Administrator');
+        }
         return back()->with('success', 'Doctor Status Changed');
     }
     public function addLeave(Doctor $doctor, Request $request)
     {
+
         $leaves = DoctorLeave::where('date', $request->date)->get();
         // dd($leaves->count() > 0);
         if ($leaves->count() == 0) {
@@ -262,6 +278,12 @@ class DoctorController extends Controller
 
         DoctorLeave::create(['doctor_id' => $doctor->id, 'date' => $request->date]);
         // dd($doctor);
+        $schedule = DoctorSchedule::where('date',$request->date)->first();
+        if (isset($schedule)){
+            $schedule->status = false;
+            $schedule->save();
+        }
+
         return back()->with('success', 'Doctor Leave Date added Successfully');
     }
 }

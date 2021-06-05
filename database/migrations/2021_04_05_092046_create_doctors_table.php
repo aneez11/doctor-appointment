@@ -26,6 +26,7 @@ class CreateDoctorsTable extends Migration
             $table->string('dob')->nullable();
             $table->string('fees')->nullable();
             $table->string('user_id')->nullable();
+            $table->boolean('isComplete')->default(false);
             $table->timestamps();
         });
     }

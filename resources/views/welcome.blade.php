@@ -40,10 +40,8 @@
     <div class="container">
         <div class="row featurette">
             <div class="col-md-7 order-md-2">
-                <h2 class="featurette-heading">Oh yeah, it’s that good. <span
-                        class="text-muted">See for yourself.</span></h2>
-                <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how
-                    this layout would work with some actual real-world content in place.</p>
+                <h2 class="featurette-heading">We are here for you.</h2>
+                <p class="lead">“In nothing do men more nearly approach the gods than in giving health to men.”― Cicero</p>
             </div>
             <div class="col-md-5 order-md-1">
                 <img src="https://pngimg.com/uploads/doctor/doctor_PNG15988.png" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="">
@@ -61,8 +59,7 @@
                 <img src="{{ asset('images/med-logo-01.svg') }}" class="bi me-2 my-auto" height="100%" alt="">
                 <div class="text-end my-auto" style="width: 50%">
                     <h4><b>Doctor's Appointment System</b></h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy text ever since the 1500s, </p>
+                    <p>We are here to serve. </p>
                 </div>
             </div>
         </div>

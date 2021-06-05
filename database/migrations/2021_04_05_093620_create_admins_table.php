@@ -23,6 +23,7 @@ class CreateAdminsTable extends Migration
             $table->string('phone')->nullable();
             $table->string('gender')->nullable();
             $table->string('address')->nullable();
+            $table->boolean('isComplete')->default(true);
             $table->timestamps();
         });
     }

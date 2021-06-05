@@ -35,4 +35,7 @@ class Appointment extends Model
     {
         return $this->belongsTo(Appointment::class, 'referred_from');
     }
+    public function payment(){
+        return $this->hasOne(Payment::class);
+    }
 }

@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\DoctorSchedule;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 
 class DoctorScheduleController extends Controller
 {
     public function doctorSchedule($id)
     {
-        $schedules = DoctorSchedule::where('doctor_id', $id)->get();
+        $schedules = DoctorSchedule::where('doctor_id', $id)->where('status',true)->get();
         return response()->json($schedules);
+    }
+    public function more($date){
+        $schedule = DoctorSchedule::where('date',$date)->first();
+//        dd($schedule);
+        return response()->json($schedule);
     }
     /**
      * Display a listing of the resource.

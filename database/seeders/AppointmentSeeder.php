@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Payment;
 use Faker\Factory as Faker;
 
 use Illuminate\Database\Seeder;
@@ -21,11 +22,10 @@ class AppointmentSeeder extends Seeder
         $faker = Faker::create();
         $patients = Patient::all();
         foreach ($patients as $patient) {
-            for ($i = 0; $i < 5; $i++) {
                 $doctor = Doctor::inRandomOrder()->first();
-                if ($doctor) {
+
                     $schedule = $doctor->schedules()->first();
-                    if ($schedule) {
+
                         $appointmentNumber = sprintf("%03u-%s-%s", $doctor->id, $schedule->date, '10:30');
                         $data = [
                             'patient_id' => $patient->id,
@@ -34,15 +34,26 @@ class AppointmentSeeder extends Seeder
                             'appointment_number' => $appointmentNumber,
                             'reason' => $faker->realText(200),
                             'time' => $faker->time('H:i'),
-                            'status' => $faker->randomElement([0])
+                            'status' => $faker->randomElement([0]),
+                            'type' => $faker->randomElement(['Video','In Person']),
+                            'isPaid' => $faker->boolean(50)
                         ];
-                        Appointment::create($data);
-                    }
+                        $app = Appointment::create($data);
+                        if ($app->type == 'Video'){
+                            $app->update(['meeting_link'=>'http://meeting.url']);
+                        }
+                        if ($app->isPaid == true){
+                            Payment::create([
+                                'appointment_id' => $app->id,
+                                'amount' => $app->doctor->fees
+                            ]);
+                        }
+
                 }
 
                 // dd($schedule->id);
 
-            }
+
         }
-    }
+
 }

@@ -87,6 +87,7 @@
     <div class="d-flex justify-content-between align-content-center mb-4">
         <h4 class="mb-4">Schedules of <span class="text-info">{{ $user->doctor->name }}</span></h4>
         <button data-bs-toggle="modal" data-bs-target="#addSchedule" type="button" style="height: 32px"
+                data-bs-type="create"
             class="btn btn-sm btn-custom">Add New Schedule
         </button>
     </div>
@@ -122,10 +123,8 @@
                         <button data-bs-toggle="modal" data-bs-target="#addSchedule" data-bs-id="{{ $schedule->id }}"
                             data-bs-date="{{ $schedule->date }}" data-bs-start="{{ $schedule->start_time }}"
                             data-bs-end="{{ $schedule->end_time }}" data-bs-max="{{ $schedule->max_patients }}"
+                                data-bs-type="edit"
                             class="btn btn-warning bn-sm">Edit
-                        </button>
-                        <button data-bs-toggle="modal" data-bs-target="#deleteDoctor"
-                            class="btn btn-danger bn-sm">Delete
                         </button>
                     </div>
                 </td>
@@ -277,13 +276,23 @@
             let startTime = button.getAttribute('data-bs-start')
             let endTime = button.getAttribute('data-bs-end')
             let maxPatients = button.getAttribute('data-bs-max')
-            editModal.querySelector('#date').value = date
-            editModal.querySelector('#start_time').value = startTime
-            editModal.querySelector('#end_time').value = endTime
-            editModal.querySelector('#max_patients').value = maxPatients
-            let editUrl = '{{ route('doctors.editSchedule',":id") }}'
-            editUrl = editUrl.replace(':id', id);
-            $('#editSchedule').attr('action', editUrl);
+            let type = button.getAttribute('data-bs-type')
+            if (type === 'edit'){
+                editModal.querySelector('#date').value = date
+                editModal.querySelector('#start_time').value = startTime
+                editModal.querySelector('#end_time').value = endTime
+                editModal.querySelector('#max_patients').value = maxPatients
+                let editUrl = '{{ route('doctors.editSchedule',":id") }}'
+                editUrl = editUrl.replace(':id', id);
+                $('#editSchedule').attr('action', editUrl);
+            }
+            else if (type === 'create'){
+                let editUrl = '{{ route('doctors.addSchedule',":id") }}'
+                editUrl = editUrl.replace(':id', {{ $user->doctor->id }});
+                console.log(editUrl)
+                $('#editSchedule').attr('action', editUrl);
+            }
+
         })
 </script>
 @endsection

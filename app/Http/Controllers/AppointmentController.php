@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Payment;
 use App\Notifications\AppointmentNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -50,15 +51,20 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+//         dd($request);
         $request->validate([
             'patient_id' => 'required',
             'doctor_id' => 'required',
             'doctor_schedule_id' => 'required',
             'time' => 'required',
+            'type' => 'required',
             'description' => 'required'
         ]);
         $appointmentNumber = sprintf("%03u-%s-%s", $request->doctor_id, $request->date, $request->time);
+        $oldApp = Appointment::where('appointment_number',$appointmentNumber)->where('status',0)->get();
+        if ($oldApp->count() > 0){
+            return back()->with('warning','You have already booked Appoitment for the selected date and time');
+        }
         // dd($appointmentNumber);
         $data = [
             'doctor_id' => $request->doctor_id,
@@ -67,6 +73,7 @@ class AppointmentController extends Controller
             'appointment_number' => $appointmentNumber,
             'reason' => $request->description,
             'time' => $request->time,
+            'type' => $request->type,
         ];
         // dd($data);
         $newApp = Appointment::create($data);
@@ -88,6 +95,16 @@ class AppointmentController extends Controller
         }
         $newApp->patient->user->notify(new AppointmentNotification($notification));
         $newApp->doctor->user->notify(new AppointmentNotification($notification));
+        if (isset($request->payment) && $request->payment == 'true'){
+            $newApp->update(['isPaid'=>true]);
+            Payment::create([
+                'appointment_id' => $newApp->id,
+                'amount' => $newApp->doctor->fees
+            ]);
+        }
+        if ($newApp->type == 'Video'){
+            $newApp->update(['meeting_link'=>$request->meeting_link]);
+        }
         return back()->with('success', 'Appointment Created Successfully');
         // dd($request);
     }
@@ -182,5 +199,16 @@ class AppointmentController extends Controller
         // dd($appointments);
         $appointments->update(['status' => 1]);
         return back()->with('success', 'Appointment Completed Successfully');
+    }
+    public function check($date){
+        $arr = [];
+        $appointments = Appointment::all();
+        foreach ($appointments as $appointment){
+            if ($appointment->schedule->date == $date){
+                array_push($arr,$appointment->time);
+            }
+        }
+
+        return response()->json($arr);
     }
 }

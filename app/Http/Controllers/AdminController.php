@@ -20,19 +20,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-//        $user = [
-//            "first_name"=> "Harry",
-//            "last_name"=> "Ghim",
-//            "email"=> "fhjdhf@djhfjdf.ff",
-//            "password"=> "bdkfhds1e3r",
-//        ];
-//        $test = Zoom::user()->create([
-//            'first_name' => 'First Name',
-//            'last_name' => 'Last Name',
-//            'email' => 'test@test.com',
-//            'password' => 'password'
-//        ]);
-//        dd($test);
+
         $admins = Admin::where('id', '!=', Auth::user()->admin->id)->get();
         return view('admins.index', compact('admins'));
     }
@@ -122,7 +110,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($admin->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admins')->ignore($admin->id)],
             'dob' => ['required'],
             'gender' => ['required'],
             'phone' => 'required',
@@ -132,6 +120,7 @@ class AdminController extends Controller
             $request->validate([
                 'password' => ['string', 'min:8', 'confirmed'],
             ]);
+            $admin->user()->update(['password',bcrypt($request->password)]);
         }
         $data = [
             'name' => $request->name,
@@ -142,6 +131,9 @@ class AdminController extends Controller
             'address' => $request->address
         ];
         $admin->update($data);
+        $user =  User::findOrFail($admin->user_id);
+        $user->email = $request->email;
+        $user->save();
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
             $imageName = time() . '.' . $image->getClientOriginalExtension();

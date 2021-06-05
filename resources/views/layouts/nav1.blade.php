@@ -19,7 +19,7 @@
                         <a class="nav-link" href="#footer">Contact Us</a>
                     </li>
                     <li class="nav-item me-3">
-                        <a class="btn btn-custom" href="{{ route('login') }}" tabindex="-1" aria-disabled="true">Book an Appointment !</a>
+                        <a class="btn btn-custom" href="{{ route('login') }}" tabindex="-1" aria-disabled="true">Login</a>
                     </li>
 {{--                    <li class="nav-item">--}}
 {{--                        <a class="btn btn-outline-custom" href="{{ route('register') }}" tabindex="-1" aria-disabled="true">Register</a>--}}

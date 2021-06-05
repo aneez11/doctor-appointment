@@ -16,11 +16,18 @@ class DoctorSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker::create();
         $data = [
             'email' => 'doctor@email.com',
             'name' => 'Doctor. Sarah Williams',
             'dob' => '12/12/2020',
             'gender' => 'male',
+            'photo' => $faker->imageUrl(250, 250),
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'qualification' => $faker->text(50),
+            'specialist' => $faker->text(50),
+            'fees' => $faker->numberBetween(50, 100)
 
         ];
 
@@ -31,7 +38,7 @@ class DoctorSeeder extends Seeder
         $user->assignRole('doctor');
         $doctor = Doctor::create($data);
         $doctor->update(['user_id' => $user->id]);
-        $faker = Faker::create();
+
         for ($i = 0; $i < 10; $i++) {
             $data = [
                 'photo' => $faker->imageUrl(250, 250),

@@ -2,7 +2,7 @@
 @section('content')
 <div class="container my-5">
     <div class="d-flex justify-content-between align-content-center mb-4">
-        <h4>All Patients</h4>
+        <h4>All Admins</h4>
         <a href="{{ route('admins.create') }}" type="button" style="height: 32px" class="btn btn-sm btn-custom">Add New
             Admin</a>
     </div>

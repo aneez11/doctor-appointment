@@ -122,11 +122,12 @@
                         <th>Time</th>
                         <th>Doctor</th>
                         <th>Status</th>
+                        <th>Amount</th>
                         <th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($user->patient->appointments as $appointment)
+                    @foreach ($user->patient->appointments()->where('status','!=',0)->get() as $appointment)
                     <tr>
                         <td>{{ $appointment->schedule->date }}</td>
                         <td>{{ $appointment->time }}</td>
@@ -138,11 +139,16 @@
                             <span class="badge bg-danger">Not Completed</span>
                             @endif
                         </td>
+
+                        <td class="text-center">
+                            @if(isset($appointment->payment))
+                               A$ {{ $appointment->payment->amount }}
+                                @endif
+                        </td>
                         <td width="100px">
                             <div class="btn-group btn-group-sm">
                                 <a href="{{ route('appointments.show',$appointment->id) }}"
                                     class="btn btn-info bn-sm">Details</a>
-                                <a href="" class="btn btn-warning bn-sm">Edit</a>
                             </div>
                         </td>
                     </tr>

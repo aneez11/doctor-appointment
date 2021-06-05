@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
             PatientSeeder::class,
             DoctorScheduleSeeder::class,
             ReportSeeder::class,
-            AppointmentSeeder::class,
-            CheckupSeeder::class,
-            DoctorLeaveSeeder::class,
+//            AppointmentSeeder::class,
+//            CheckupSeeder::class,
+//            DoctorLeaveSeeder::class,
         ]);
     }
 }
