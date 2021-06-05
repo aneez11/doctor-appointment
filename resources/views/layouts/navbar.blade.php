@@ -98,12 +98,8 @@
     </header>
 
     <div class="py-2 nav-2">
-        <div class="container d-flex flex-wrap justify-content-center">
-            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-                <label>
-                    <input type="search" class="form-control input-sm" placeholder="Search...">
-                </label>
-            </form>
+        <div class="container d-flex flex-wrap justify-content-end">
+
 
             <div class="text-end">
                 {{--                <a href="{{ route('login') }}" type="button" class="btn btn-light text-dark
