@@ -54,6 +54,11 @@ class PatientController extends Controller
             'photo' => 'required',
             'marital_status' => 'required',
         ]);
+        $user = User::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
+        $user->assignRole('patient');
         $data = [
             'name' => $request->name,
             'email' => $request->email,
@@ -62,12 +67,9 @@ class PatientController extends Controller
             'gender' => $request->gender,
             'address' => $request->address,
             'marital_status' => $request->marital_status,
+            'user_id'=>$user->id
         ];
-        $user = User::create([
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ]);
-        $user->assignRole('patient');
+
         $patient = Patient::create($data);
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');

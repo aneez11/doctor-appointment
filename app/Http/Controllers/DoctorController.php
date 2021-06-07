@@ -60,6 +60,12 @@ class DoctorController extends Controller
             'qualification' => 'required',
             'specialist' => 'required'
         ]);
+
+        $user = User::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
+        $user->assignRole('doctor');
         $data = [
             'name' => $request->name,
             'email' => $request->email,
@@ -69,13 +75,10 @@ class DoctorController extends Controller
             'address' => $request->address,
             'fees' => $request->fees,
             'qualification' => $request->qualification,
-            'specialist' => $request->specialist
+            'specialist' => $request->specialist,
+            'user_id' => $user->id
         ];
-        $user = User::create([
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ]);
-        $user->assignRole('doctor');
+
         $doctor = Doctor::create($data);
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
@@ -192,7 +195,7 @@ class DoctorController extends Controller
      */
     public function addSchedule(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
-        $schedule = DoctorSchedule::where('date',$request->date)->get();
+        $schedule = DoctorSchedule::where('date',$request->date)->where('doctor_id',$id)->get();
         if($schedule->count() > 0){
             return back()->with('warning','Schedule for the date has already been created. Try next Date');
         }
